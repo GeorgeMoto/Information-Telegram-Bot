@@ -3,12 +3,12 @@ Description=Telegram Bot
 After=network.target
 
 [Service]
-User=vladimir
-Group=vladimir
+User=george
+Group=george
 
-WorkingDirectory=/home/vladimir/tele_bot/
-Environment="PYTHONPATH=/home/vladimir/tele_bot/"
-ExecStart=/home/vladimir/tele_bot/.venv/bin/python /home/vladimir/tele_bot/ubuntu18/main.py
+WorkingDirectory=/home/george/Inforamtion-Telegtam-Bot/
+Environment="PYTHONPATH=/home/george/Inforamtion-Telegtam-Bot/"
+ExecStart=/home/george/Inforamtion-Telegtam-Bot/.venv/bin/python /home/george/Inforamtion-Telegtam-Bot/bot.py
 
 [Install]
 WantedBy=multi-user.target
