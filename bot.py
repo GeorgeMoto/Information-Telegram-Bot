@@ -1,5 +1,5 @@
 import telebot
-from DATA import *
+from Data import *
 from telebot import types
 
 bot = telebot.TeleBot("5263039063:AAEKR__jHHkhnlc5CmhcYR-q4LNJQXyUpEE")
@@ -35,7 +35,6 @@ def callback_worker(call):
         bot.send_message(call.message.chat.id, important_info_text, parse_mode="html")
     elif call.data == "key_payments":
         bot.send_message(call.message.chat.id, payments_text, parse_mode="html")
-
 
 
 bot.polling(none_stop=True)
