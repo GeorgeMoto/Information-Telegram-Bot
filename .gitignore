@@ -1,3 +1,5 @@
 .idea
 /Telegram bot for outline.iml
 __pycache__/*
+/config.py
+sql_data
