@@ -1,5 +1,10 @@
 BOT_TOKEN = "5263039063:AAEKR__jHHkhnlc5CmhcYR-q4LNJQXyUpEE"
 
-admins = (425895564,)
+admins = {"George": 425895564}
 
-PATH_TO_DB = "users_db.db"
+# Link for vps server
+PATH_TO_DB = "/home/george/database/users_db.db"
+PATH_TO_BACKUP_DB = "/home/george/database/backup_db.db"
+
+# PATH_TO_DB = "sql_data/users_db.db"
+# PATH_TO_BACKUP_DB = "C:/Users/Георгий/Desktop/bot telegram/backup_db.db"
