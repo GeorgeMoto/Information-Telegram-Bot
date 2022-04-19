@@ -1,10 +1,7 @@
-import aiosqlite
-
 import sqlite3
 import datetime
 import calendar
 from contextlib import contextmanager
-from contextlib import asynccontextmanager
 
 from dt_functions.data_formatting_functions import change_str_to_date_format
 from config import PATH_TO_DB, PATH_TO_BACKUP_DB
