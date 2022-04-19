@@ -7,9 +7,9 @@ User=george
 Group=george
 
 
-WorkingDirectory=/home/george/Inforamtion-Telegtam-Bot/
-Environment="PYTHONPATH=/home/george/Inforamtion-Telegtam-Bot/"
-ExecStart=/home/george/Inforamtion-Telegtam-Bot/.venv/bin/python /home/george/Inforamtion-Telegtam-Bot/main.py
+WorkingDirectory=/home/george/Information-Telegram-Bot/
+Environment="PYTHONPATH=/home/george/Information-Telegram-Bot/"
+ExecStart=/home/george/Information-Telegram-Bot/.venv/bin/python /home/george/Information-Telegram-Bot/main.py
 
 [Install]
 WantedBy=multi-user.target
