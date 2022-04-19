@@ -80,7 +80,7 @@ async def get_subscription_info(call: CallbackQuery):
 @dp.message_handler(Command("help"))
 async def get_help(message):
 
-    await message.answer(text=information_text)
+    await message.answer(text=help_text)
 
 
 @dp.message_handler(Command("backup"))
