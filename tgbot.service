@@ -4,7 +4,8 @@ After=network.target
 
 [Service]
 User=george
-Group=georgeg
+Group=george
+
 
 WorkingDirectory=/home/george/Inforamtion-Telegtam-Bot/
 Environment="PYTHONPATH=/home/george/Inforamtion-Telegtam-Bot/"
