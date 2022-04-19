@@ -4,11 +4,11 @@ After=network.target
 
 [Service]
 User=george
-Group=george
+Group=georgeg
 
 WorkingDirectory=/home/george/Inforamtion-Telegtam-Bot/
 Environment="PYTHONPATH=/home/george/Inforamtion-Telegtam-Bot/"
-ExecStart=/home/george/Inforamtion-Telegtam-Bot/.venv/bin/python /home/george/Inforamtion-Telegtam-Bot/bot.py
+ExecStart=/home/george/Inforamtion-Telegtam-Bot/.venv/bin/python /home/george/Inforamtion-Telegtam-Bot/main.py
 
 [Install]
 WantedBy=multi-user.target
