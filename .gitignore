@@ -5,5 +5,5 @@ __pycache__/*
 /sql_data
 /sql/sql_commands.py
 Data.py
-aiosqlite.py
+/aiosqlite.py
 config.py
