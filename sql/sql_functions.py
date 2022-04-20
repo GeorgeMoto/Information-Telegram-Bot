@@ -187,3 +187,14 @@ def update_link_name(user_id, link_name):
     with open_db() as cursor:
         sql_update_link_address = "UPDATE users SET link_name = ? WHERE id = ?"
         cursor.execute(sql_update_link_address, (link_name, user_id))
+
+
+# Get a number of active links to connect from database
+def get_number_of_link_address():
+
+    with open_db() as cursor:
+
+        cursor.execute("SELECT count(link_address) FROM links")
+        result = cursor.fetchone()[0]
+
+    return result

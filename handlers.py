@@ -2,6 +2,7 @@ import asyncio
 
 from aiogram.dispatcher.filters import Command
 from aiogram.types import Message, CallbackQuery
+from aiogram.utils import exceptions
 
 from main import bot, dp
 from config import admins
@@ -31,6 +32,16 @@ async def start(message: Message):
     keyboard = get_start_key_board()
 
     await message.answer(text=greetings, reply_markup=keyboard)
+
+
+@dp.message_handler(Command("links"))
+async def get_number_of_links_(message):
+    if message.from_user.id in admins.values():
+
+        number_of_link_address = get_number_of_link_address()
+        print(number_of_link_address)
+
+        await message.answer(text=f"В базе осталось ссылок для подключений: {number_of_link_address}")
 
 
 @dp.callback_query_handler(lambda call: call.data == "key_information")
@@ -117,7 +128,6 @@ async def make_backup(call: CallbackQuery):
 async def send_msg(message_to_send):
 
     if message_to_send.from_user.id in admins.values():
-        await message_to_send.answer(text="Для массовой рассылки необходимо чтобы текст начинался с симовла '#'")
         msg = message_to_send.text
 
         if msg.startswith("#"):
@@ -126,16 +136,17 @@ async def send_msg(message_to_send):
             message_counter = 0
 
             for id_user in id_list:
-
-                if message_counter < 45:
-                    await bot.send_message(id_user, text=msg)
-                    message_counter += 1
-                else:
-                    await asyncio.sleep(5)
-                    message_counter = 0
-
-    else:
-        await message_to_send.answer(text="Я тебя не понимаю.")
+                try:
+                    if message_counter < 45:
+                        await bot.send_message(id_user, text=msg)
+                        message_counter += 1
+                    else:
+                        await asyncio.sleep(5)
+                        message_counter = 0
+                except exceptions.ChatNotFound:
+                    continue
+        else:
+            await message_to_send.answer(text="Для массовой рассылки необходимо чтобы текст начинался с символа '#'")
 
 
 @dp.message_handler(content_types=["photo"])
