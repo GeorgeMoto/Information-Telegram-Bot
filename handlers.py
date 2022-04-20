@@ -11,7 +11,7 @@ from Data import *
 from sql.sql_functions import *
 from dt_functions.data_formatting_functions import *
 
-
+# send greening message to admin when bot started
 async def send_greeting_to_admin(dp):
     await bot.send_message(chat_id=admins["George"], text="<b>Бот запущен</b>")
 

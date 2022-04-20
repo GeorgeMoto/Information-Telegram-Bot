@@ -12,4 +12,3 @@ PATH_TO_BACKUP_DB = "/home/george/database/backup_db.db"
 
 # PATH_TO_DB = "sql_data/users_db.db"
 # PATH_TO_BACKUP_DB = "C:/Users/Георгий/Desktop/bot telegram/backup_db.db"
-#test

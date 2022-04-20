@@ -189,7 +189,7 @@ def update_link_name(user_id, link_name):
         cursor.execute(sql_update_link_address, (link_name, user_id))
 
 
-# Get a number of active links to connect from database
+# Get a number of active links from database
 def get_number_of_link_address():
 
     with open_db() as cursor:
