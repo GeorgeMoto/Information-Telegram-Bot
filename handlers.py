@@ -6,10 +6,11 @@ from aiogram.utils import exceptions
 
 from main import bot, dp
 from config import admins
-from keyboars.keyboars import *
+from keyboard.inline_keyboards import *
 from Data import *
 from sql.sql_functions import *
 from dt_functions.data_formatting_functions import *
+
 
 # send greening message to admin when bot started
 async def send_greeting_to_admin(dp):
@@ -39,37 +40,35 @@ async def get_number_of_links_(message):
     if message.from_user.id in admins.values():
 
         number_of_link_address = get_number_of_link_address()
-        print(number_of_link_address)
-
         await message.answer(text=f"В базе осталось ссылок для подключений: {number_of_link_address}")
 
 
 @dp.callback_query_handler(lambda call: call.data == "key_information")
 async def get_information(call: CallbackQuery):
 
-    await call.message.answer(information_text)
-    await call.answer(cache_time=30)
+    await call.message.edit_text(information_text, reply_markup=get_back_to_main_menu())
+    await call.answer(cache_time=20)
 
 
 @dp.callback_query_handler(lambda call: call.data == "key_download")
 async def get_info_download(call: CallbackQuery):
 
-    await call.message.answer(download_text)
-    await call.answer(cache_time=30)
+    await call.message.edit_text(download_text, reply_markup=get_back_to_main_menu())
+    await call.answer(cache_time=20)
 
 
 @dp.callback_query_handler(lambda call: call.data == "key_important_info")
 async def get_important_info(call: CallbackQuery):
 
-    await call.message.answer(important_info_text)
-    await call.answer(cache_time=30)
+    await call.message.edit_text(important_info_text, reply_markup=get_back_to_main_menu())
+    await call.answer(cache_time=20)
 
 
 @dp.callback_query_handler(lambda call: call.data == "key_payments")
 async def get_payments_info(call: CallbackQuery):
 
-    await call.message.answer(payments_text, reply_markup=get_keyboard_to_make_payment())
-    await call.answer(cache_time=30)
+    await call.message.edit_text(payments_text, reply_markup=get_keyboard_to_make_payment())
+    await call.answer(cache_time=5)
 
 
 @dp.callback_query_handler(lambda call: call.data == "key_subscription")
@@ -79,18 +78,23 @@ async def get_subscription_info(call: CallbackQuery):
         date = change_date_format(get_finish_date(call.from_user.id))
         paynot = change_date_format(get_payment_notice(call.from_user.id))
 
-        await call.message.answer(payment_notice_text.format(date, paynot))
-        await call.answer(cache_time=30)
+        await call.message.edit_text(payment_notice_text.format(date, paynot), reply_markup=get_back_to_main_menu())
+        await call.answer(cache_time=10)
 
     else:
 
-        await call.message.answer("Вы еще не оформили подписку")
-        await call.answer(cache_time=30)
+        await call.message.edit_text("Вы еще не оформили подписку", reply_markup=get_back_to_main_menu())
+        await call.answer(cache_time=10)
+
+
+@dp.callback_query_handler(lambda call: call.data == "back_to_main_menu")
+async def back_to_main_menu(call: CallbackQuery):
+    await call.message.edit_text(text=greetings, reply_markup=get_start_key_board())
+    await bot.answer_callback_query(call.id)
 
 
 @dp.message_handler(Command("help"))
 async def get_help(message):
-
     await message.answer(text=help_text)
 
 
@@ -98,30 +102,25 @@ async def get_help(message):
 async def backup(message):
 
     if message.from_user.id in admins.values():
-        await message.answer(text="Хочешь сделать backup бд?", reply_markup=get_backup_keyboard())
 
-
-@dp.callback_query_handler(lambda call: call.data == "key_backup")
-async def get_make_backup(call: CallbackQuery):
-
-    keyboard = get_keyboard_yes_or_no("ДА", "НЕТ", "key_copy", "key_cancel_copy")
-    create_backup_db()
-
-    await call.message.answer("Backup Запущен. Выслать копию бд?", reply_markup=keyboard)
+        keyboard = get_keyboard_yes_or_no("ДА", "НЕТ", "key_copy", "key_cancel_copy")
+        create_backup_db()
+        await message.answer("Backup Запущен. Выслать копию бд?", reply_markup=keyboard)
 
 
 @dp.callback_query_handler(lambda call: call.data in ("key_copy", "key_cancel_copy"))
 async def make_backup(call: CallbackQuery):
 
     if call.data == "key_copy":
-        await call.message.answer("Отправляю копиию бд")
+        await call.message.edit_text("Отправляю копиию бд")
         with open(PATH_TO_BACKUP_DB, "rb") as file:
             db = file.read()
         await bot.send_document(admins["George"], ("copy_backup_db.db", db))
+        await bot.answer_callback_query(call.id)
 
     elif call.data == "key_cancel_copy":
-        await call.message.answer("Отправка отменена")
-        await call.answer(cache_time=30)
+        await call.message.edit_text(text=greetings, reply_markup=get_start_key_board())
+        await bot.answer_callback_query(call.id)
 
 
 @dp.message_handler(content_types=["text"])
@@ -133,20 +132,31 @@ async def send_msg(message_to_send):
         if msg.startswith("#"):
             msg = msg.lstrip("#")
             id_list = get_id_list()
-            message_counter = 0
 
             for id_user in id_list:
                 try:
-                    if message_counter < 45:
-                        await bot.send_message(id_user, text=msg)
-                        message_counter += 1
-                    else:
-                        await asyncio.sleep(5)
-                        message_counter = 0
+                    await bot.send_message(id_user, text=msg)
+                    await asyncio.sleep(0.3)
+
                 except exceptions.ChatNotFound:
                     continue
         else:
             await message_to_send.answer(text="Для массовой рассылки необходимо чтобы текст начинался с символа '#'")
+
+
+@dp.message_handler(content_types=["video"])
+async def send_video(video_to_send):
+
+    if video_to_send.from_user.id in admins.values():
+        id_list = get_id_list()
+
+        for id_user in id_list:
+            try:
+                await bot.send_video(id_user, video_to_send.video.file_id)
+                await asyncio.sleep(0.3)
+
+            except exceptions.ChatNotFound:
+                continue
 
 
 @dp.message_handler(content_types=["photo"])
@@ -202,31 +212,38 @@ async def cancel_subscription(callback: types.CallbackQuery):
     await bot.send_message(id_for_subscription, "Что-то пошло не так. Попробуйте повторить оплату чуть позже. "
                                                 "Если проблема не решится то наша поддержка на связи "
                                                 "в боте @Butter_robot_supportBot")
+    await bot.answer_callback_query(callback.id)
 
 
 @dp.callback_query_handler(lambda call: call.data == "key_to_make_payment")
 async def will_payment(call: CallbackQuery):
 
     if get_status(call.from_user.id):
-        keyboard = get_keyboard_yes_or_no("ДА", "НЕТ", "key_make_payment", "key_cancel_payment")
-        await call.message.answer(f"Ваша подписка в настоящий момент активна. "
-                                  f"Срок действия подписки закончится "
-                                  f"<b>{change_date_format(get_finish_date(call.from_user.id))}</b>."
-                                  f" Продолжить оплату?", reply_markup=keyboard)
-        await call.answer(cache_time=30)
+        keyboard = get_keyboard_yes_or_no("Продолжить", "<<< Назад", "key_make_payment", "key_cancel_payment")
+        await call.message.edit_text(f"Ваша подписка в настоящий момент активна. "
+                                     f"Срок действия подписки закончится "
+                                     f"<b>{change_date_format(get_finish_date(call.from_user.id))}</b>."
+                                     f" Продолжить оплату?", reply_markup=keyboard)
+        await call.answer(cache_time=5)
 
     else:
-        await call.message.answer(how_to_pay_text)
-        await call.answer(cache_time=30)
+        await call.message.edit_text(text=how_to_pay_text, reply_markup=get_back_to_will_payment())
+        await call.answer(cache_time=5)
 
 
 @dp.callback_query_handler(lambda call: call.data in ("key_make_payment", "key_cancel_payment"))
 async def continue_payment(call: CallbackQuery):
 
     if call.data == "key_make_payment":
-        await call.message.answer(how_to_pay_subscriber)
-        await call.answer(cache_time=30)
+        await call.message.edit_text(how_to_pay_subscriber, reply_markup=get_back_to_will_payment())
+        await call.answer(cache_time=5)
 
     elif call.data == "key_cancel_payment":
-        await call.message.answer("Оплата отменена")
-        await call.answer(cache_time=30)
+        await call.message.edit_text(text=payments_text, reply_markup=get_keyboard_to_make_payment())
+        await call.answer(cache_time=5)
+
+
+@dp.callback_query_handler(lambda call: call.data == "back_to_will_payment")
+async def back_to_payment_menu(call: CallbackQuery):
+    await call.message.edit_text(payments_text, reply_markup=get_keyboard_to_make_payment())
+    await call.answer(cache_time=5)

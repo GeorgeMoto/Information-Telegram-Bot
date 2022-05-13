@@ -28,18 +28,10 @@ def get_start_key_board():
 
 def get_keyboard_to_make_payment():
 
-    keyboard = types.InlineKeyboardMarkup(row_width=1)
+    keyboard = types.InlineKeyboardMarkup(row_width=2)
     key_to_make_payment = types.InlineKeyboardButton(text="Произвести оплату", callback_data="key_to_make_payment")
-    keyboard.add(key_to_make_payment)
-
-    return keyboard
-
-
-def get_backup_keyboard():
-
-    keyboard = types.InlineKeyboardMarkup(row_width=1)
-    key_backup = types.InlineKeyboardButton(text="ДА", callback_data="key_backup")
-    keyboard.add(key_backup)
+    key_back_to_main_menu = types.InlineKeyboardButton(text="<<< Назад", callback_data="back_to_main_menu")
+    keyboard.add(key_to_make_payment, key_back_to_main_menu)
 
     return keyboard
 
@@ -50,5 +42,21 @@ def get_control_subscription_keyboard():
     key_copy = types.InlineKeyboardButton(text="Продлить/оформить подписку", callback_data="key_renew_subscription")
     key_cancel_copy = types.InlineKeyboardButton(text="Отмена", callback_data="key_cancel_subscription")
     keyboard.add(key_copy, key_cancel_copy)
+
+    return keyboard
+
+
+def get_back_to_main_menu():
+    keyboard = types.InlineKeyboardMarkup(row_width=1)
+    key_back_to_main_menu = types.InlineKeyboardButton(text="<<< Назад", callback_data="back_to_main_menu")
+    keyboard.add(key_back_to_main_menu)
+
+    return keyboard
+
+
+def get_back_to_will_payment():
+    keyboard = types.InlineKeyboardMarkup(row_width=1)
+    key_back_to_will_payment = types.InlineKeyboardButton(text="<<< Назад", callback_data="back_to_will_payment")
+    keyboard.add(key_back_to_will_payment)
 
     return keyboard
