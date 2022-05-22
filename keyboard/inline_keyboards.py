@@ -15,13 +15,13 @@ def get_start_key_board():
 
     keyboard = types.InlineKeyboardMarkup(row_width=1)
 
-    key_information = types.InlineKeyboardButton(text="🧐 Информация о проекте", callback_data="key_information")
-    key_download = types.InlineKeyboardButton(text="🚀 Где скачать софт", callback_data="key_download")
+    key_information = types.InlineKeyboardButton(text="🧐 О проекте", callback_data="key_information")
+    key_download = types.InlineKeyboardButton(text="🚀 Как установить", callback_data="key_download")
     key_important_info = types.InlineKeyboardButton(text="‼️Важное", callback_data="key_important_info")
     key_payments = types.InlineKeyboardButton(text="💸️ Оплата", callback_data="key_payments")
     key_subscription = types.InlineKeyboardButton(text="📟 Сведения о подписке", callback_data="key_subscription")
 
-    keyboard.add(key_information, key_download, key_important_info, key_payments, key_subscription)
+    keyboard.add(key_information, key_download, key_payments, key_subscription, key_important_info)
 
     return keyboard
 
