@@ -190,8 +190,8 @@ async def will_subscribe(callback: types.CallbackQuery):
         update_link_address(id_for_subscription, link_address)
         update_link_name(id_for_subscription, link_name)
         delete_address_data(link_address)
-        await bot.send_message(id_for_subscription, "Подписка оформлена. "
-                                                    "Ссылка для подключения:\n{}".format(link_address))
+        await bot.send_message(id_for_subscription, text_for_new_link)
+        await bot.send_message(id_for_subscription, "{}".format(link_address))
         await bot.send_message(admins["George"], "Пользователю с данными: \n {} \nприсвоена ссылка "
                                                  "с именем:\n""'{}'".format(user_data_for_subscription, link_name))
 
